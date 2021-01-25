@@ -93,9 +93,7 @@ const SimpleMap = (props) => {
 	}
 
 
-	return isLoaded ? (
-		
-		
+	return isLoaded ? (		
 		<GoogleMap
 			mapContainerStyle={containerStyle}
 			center={center}

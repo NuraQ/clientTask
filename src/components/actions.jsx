@@ -1,5 +1,4 @@
 export const setPoly = (globalState, payload) =>{
-    console.log("payload"+payload)
     globalState.setState({hoveredPoly: payload})
 
 }
@@ -10,7 +9,9 @@ export const changeColorForPoly = (globalState,id,payload) =>{
     globalState.setState({ colors });
 }
 
-export const addColorForPoly = (globalState,payload) =>{
-    const list = [...globalState.polygonsColors, payload];
-    globalState.setState({list})
+export const addColorForPoly = (globalState, payload) => { 
+    const color = payload 
+    console.log("color"+payload)
+    const list = [{...globalState.polygonsColors}, color];
+   globalState.setState({polygonsColors: list})
 }
