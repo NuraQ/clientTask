@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { SimpleMap } from './components/map'
+import { createGlobalState } from 'react-hooks-global-state';
 
 import { RenderTable } from './components/polygonsTable'
 import { select } from './components/polygonsTable'
@@ -9,6 +10,9 @@ import { select } from './components/polygonsTable'
 export default function Controller() {
     const [featuresData, setFeatures] = React.useState([])
     const [properties, setProperties] = React.useState([])
+    const initialState = {polyToShow: 0}
+    const { useGlobalState } = createGlobalState(initialState);
+    const [polyId, setPoly] = useGlobalState('polyToShow');
 
     useEffect(() => {
         // Update the document title using the browser API
@@ -45,7 +49,11 @@ export default function Controller() {
         console.log(properties)
     }
 
+    function displayInMap(id){
+       // shoaw()
+    }
     function displayInTable(id, show) {
+       // console.log(RenderTable.select+"DDDDDDD")
         select(id, show)
     }
 
@@ -53,10 +61,9 @@ export default function Controller() {
         <div >
             <div style ={{display: "flex"}} >
                 <div ><SimpleMap pos={featuresData} mapper={displayInTable} /></div>
-                <div ><RenderTable properties = {properties}></RenderTable></div>
+                <div ><RenderTable properties = {properties} ></RenderTable></div>
 
             </div>
-            {/* <renderTable props ={properties}></renderTable> */}
         </div>
     );
 

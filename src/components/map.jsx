@@ -1,6 +1,7 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
 import { Polygon } from '@react-google-maps/api';
+import useGlobal from './globalState';
 
 import './marker.css'
 
@@ -9,7 +10,9 @@ const containerStyle = {
 	height: '700px'
 };
 
+
 const SimpleMap = (props) => {
+	const [globalState,globalActions] = useGlobal()
 
 	const center = {
 		lat: -73.9130656659264,
@@ -22,14 +25,15 @@ const SimpleMap = (props) => {
 
 	const [map, setMap] = React.useState(null)
 	const [polygons, setPolygons] = React.useState([])
+	const [polygonColor, setPolygonColor] = React.useState([])
+
+
 	const onLoad = React.useCallback(function callback(map) {
 		const bounds = new window.google.maps.LatLngBounds();
 		map.fitBounds(bounds);
 		setMap(map)
 
 	}, [])
-
-
 
 	const onUnmount = React.useCallback(function callback(map) {
 		setMap(null)
@@ -56,33 +60,42 @@ const SimpleMap = (props) => {
 		}
 	}
 	function handleMouseOver(e) {
+//		setPolygonColor(this.fillColor)
+		console.log(this.color)
 		this.setOptions({ fillColor: "Blue" });
 		props.mapper(this.polygonKey, true)
 	}
 	function handleMouseOut(e) {
-		//this.setOptions({ fillColor: "#FF0000" });
+		this.setOptions({ fillColor: "#FF0000" });
 		props.mapper(this.polygonKey, false)
 	}
 	const polygonsArray = []
 	const onLoadPoly = useCallback(
 		polygon => {
 			polygonsArray.push(polygon)
-			showPolygonFromMap(9)
 			setPolygons(polygonsArray)
 		},
 		[]
 	);
+	useEffect(()=>{
+		console.log("ylla")
+		showPolygonFromMap()
+	},[globalState.hoveredPoly,polygonsArray])
 
-	function showPolygonFromMap(polyId) {
-		polygonsArray[0].setOptions({fillColor: "Pink"})
-		console.log((polygonsArray[0].fillColor))
-	//	map.event.trigger(map, 'resize')  // force map update
-
+	function showPolygonFromMap()  {
+		let polyId = globalState.hoveredPoly
+		if (polygons[polyId] != null){ 
+		polygons[polyId].setOptions({fillColor: "Blue"})
+		console.log("Dsdsdsdsds")
+		console.log((polygons[polyId].fillColor))
+		setMap(polygons[polyId])
+		}
 	}
 
 
 	return isLoaded ? (
-
+		
+		
 		<GoogleMap
 			mapContainerStyle={containerStyle}
 			center={center}
@@ -92,26 +105,8 @@ const SimpleMap = (props) => {
 		>
 			{coordinates()}
 
-			{paths.slice(0, 1).map(
+			{paths.slice(0, 10).map(
 				path => {
-					// console.log("ylla");
-					// const bermudaTriangle = new window.google.maps.Polygon({
-					// 	path: path,
-
-					// 	key:paths.indexOf(path) + 1,
-					// 	onMouseOver:{handleMouseOver},
-					// 	onMouseOut : {handleMouseOut},
-					// 	onUnmount: {onUnmount},
-					// 	strokeColor: "#FF0000",
-					// 	strokeOpacity: 0.8,
-					// 	strokeWeight: 2,
-					// 	fillColor: "#FF0000",
-					// 	fillOpacity: 0.35,
-					// 	draggable: true,
-					// 	geodesic: true,
-					//   });
-
-					//   bermudaTriangle.setMap(map);
 					return <Polygon
 
 						path={path}
@@ -130,13 +125,10 @@ const SimpleMap = (props) => {
 							fillOpacity: 0.35,
 							draggable: true,
 							geodesic: true,
-
-
 						}}
 
 						onClick={() => {
 							console.log(paths.indexOf(path))
-
 						}}
 					/>
 				}
@@ -151,4 +143,4 @@ const SimpleMap = (props) => {
 
 
 
-export { SimpleMap };
+export { SimpleMap};
