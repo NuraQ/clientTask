@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { SimpleMap } from './components/map'
-import { createGlobalState } from 'react-hooks-global-state';
-
+import useGlobal from './components/globalState';
+ 
 import { RenderTable } from './components/polygonsTable'
 import { select } from './components/polygonsTable'
 
@@ -10,10 +10,10 @@ import { select } from './components/polygonsTable'
 export default function Controller() {
     const [featuresData, setFeatures] = React.useState([])
     const [properties, setProperties] = React.useState([])
-    const initialState = {polyToShow: 0}
-    const { useGlobalState } = createGlobalState(initialState);
-    const [polyId, setPoly] = useGlobalState('polyToShow');
+    const [globalState,globalActions] = useGlobal();
 
+
+    const colors = ["#FFE4C4","#5F9EA0","#008B8B","#006400","#556B2F","#ADD8E6","#F5F5F5","#F0F8FF","#B22222"]
     useEffect(() => {
         // Update the document title using the browser API
         function fetchData() {
@@ -33,7 +33,6 @@ export default function Controller() {
             })
         }
         fetchData();
-
     }, []);
 
     useEffect(() => {
@@ -41,28 +40,27 @@ export default function Controller() {
     }, [featuresData])
 
     function setPropertiesTable() {
+
+        globalActions.addColorForPoly()
         const propertiesData = [];
         featuresData.forEach(property => {
-            propertiesData.push(property.properties)
+            propertiesData.push(property.properties);
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            globalActions.addColorForPoly(color);
+
         });
         setProperties(propertiesData);
-        console.log(properties)
     }
 
-    function displayInMap(id){
-       // shoaw()
-    }
     function displayInTable(id, show) {
-       // console.log(RenderTable.select+"DDDDDDD")
-        select(id, show)
+        select(id, show);
     }
 
     return (
         <div >
             <div style ={{display: "flex"}} >
                 <div ><SimpleMap pos={featuresData} mapper={displayInTable} /></div>
-                <div ><RenderTable properties = {properties} ></RenderTable></div>
-
+                <div ><RenderTable properties = {properties}></RenderTable></div>
             </div>
         </div>
     );

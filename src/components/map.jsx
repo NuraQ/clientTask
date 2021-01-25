@@ -49,7 +49,7 @@ const SimpleMap = (props) => {
 					ele.geometry.coordinates.map(
 						coord => {
 							for (var k = 0; k < coord.length; k++) {
-								paths[i].push({ lat: parseFloat(coord[k][0]), lng: parseFloat(coord[k][1]) })
+								paths[i].push({ lat: parseFloat(coord[k][0]), lng: parseFloat(coord[k][1]) });
 
 							}
 						}
@@ -61,33 +61,29 @@ const SimpleMap = (props) => {
 	}
 	function handleMouseOver(e) {
 //		setPolygonColor(this.fillColor)
-		console.log(this.color)
 		this.setOptions({ fillColor: "Blue" });
-		props.mapper(this.polygonKey, true)
+		props.mapper(this.polygonKey, true);
 	}
 	function handleMouseOut(e) {
-		this.setOptions({ fillColor: "#FF0000" });
-		props.mapper(this.polygonKey, false)
+		this.setOptions({ fillColor: globalState.polygonsColors[this.polygonKey] });
+		props.mapper(this.polygonKey, false);
 	}
 	const polygonsArray = []
 	const onLoadPoly = useCallback(
 		polygon => {
-			polygonsArray.push(polygon)
-			setPolygons(polygonsArray)
+			polygonsArray.push(polygon);
+			setPolygons(polygonsArray);
 		},
 		[]
 	);
 	useEffect(()=>{
-		console.log("ylla")
 		showPolygonFromMap()
-	},[globalState.hoveredPoly,polygonsArray])
+	},[globalState.hoveredPoly,polygonsArray,globalState.polygonsColors]);
 
 	function showPolygonFromMap()  {
 		let polyId = globalState.hoveredPoly
 		if (polygons[polyId] != null){ 
-		polygons[polyId].setOptions({fillColor: "Blue"})
-		console.log("Dsdsdsdsds")
-		console.log((polygons[polyId].fillColor))
+		polygons[polyId].setOptions({fillColor: "Blue"});
 		setMap(polygons[polyId])
 		}
 	}
@@ -118,10 +114,10 @@ const SimpleMap = (props) => {
 
 						options={{
 							polygonKey: paths.indexOf(path) + 1,
-							strokeColor: "#FF0000",
+							strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
 							strokeOpacity: 0.8,
 							strokeWeight: 2,
-							fillColor: "#FF0000",
+							fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
 							fillOpacity: 0.35,
 							draggable: true,
 							geodesic: true,

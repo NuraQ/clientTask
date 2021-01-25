@@ -5,6 +5,7 @@ import * as actions from "./actions";
 
 const initialState = {
     hoveredPoly: 0,
+    polygonsColors: []
     
 }
 
