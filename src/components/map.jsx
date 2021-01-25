@@ -13,7 +13,6 @@ const containerStyle = {
 
 const SimpleMap = (props) => {
 	const [globalState,globalActions] = useGlobal()
-
 	const center = {
 		lat: -73.9130656659264,
 		lng: 40.55849125972
