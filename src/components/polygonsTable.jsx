@@ -24,7 +24,7 @@ const RenderTable = (props) => {
 			<td>{ele.Shape__Length}</td>
 			<td><button onClick={e => alert(e.target.value)} >Update</button></td>
 			<td><input defaultValue={globalState.polygonsColors[index]} id = {index} onChange={updateColor}></input></td>
-			<td><input defaultValue={globalState.polygonsColors[index]} id = {index} ></input></td>
+			{/* <td><input defaultValue={globalState.polygonsNames[index]} id = {index} ></input></td> */}
 
 		</tr>
 

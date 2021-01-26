@@ -1,18 +1,24 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
-import { Polygon } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, OverlayView, useJsApiLoader } from '@react-google-maps/api';
+import { Polygon, Marker } from '@react-google-maps/api';
+// import DrawingManager from '@react-google-maps/api/src/components/drawing'
 import useGlobal from './globalState';
+ import { DrawingManager } from '@react-google-maps/api';
+ import { Circle,Polyline } from '@react-google-maps/api';
 
 import './marker.css'
 
+// const {maan} = require("react-google-maps/lib/components/drawing/DrawingManager")
 const containerStyle = {
 	width: '700px',
 	height: '700px'
 };
 
+ // drawingManager.setMap(map);
 
 const SimpleMap = (props) => {
-	const [globalState,globalActions] = useGlobal()
+	const [globalState, globalActions] = useGlobal()
+	const [markers, setMarkers] = useState([])
 	const center = {
 		lat: -73.9130656659264,
 		lng: 40.55849125972
@@ -59,7 +65,7 @@ const SimpleMap = (props) => {
 		}
 	}
 	function handleMouseOver(e) {
-//		setPolygonColor(this.fillColor)
+		//		setPolygonColor(this.fillColor)
 		this.setOptions({ fillColor: "Blue" });
 		props.mapper(this.polygonKey, true);
 	}
@@ -75,57 +81,89 @@ const SimpleMap = (props) => {
 		},
 		[]
 	);
-	useEffect(()=>{
+	useEffect(() => {
 		showPolygonFromMap()
-	},[globalState.hoveredPoly,polygonsArray,globalState.polygonsColors]);
+	}, [globalState.hoveredPoly, polygonsArray, globalState.polygonsColors]);
 
-	function showPolygonFromMap()  {
+	function showPolygonFromMap() {
 		let polyId = globalState.hoveredPoly
-		if (polygons[polyId] != null){ 
-		polygons[polyId].setOptions({fillColor: "Blue"});
-		setMap(polygons[polyId])
+		if (polygons[polyId] != null) {
+			polygons[polyId].setOptions({ fillColor: "Blue" });
+			setMap(polygons[polyId])
 		}
 	}
 
-
+	const handleMapClick = (e) => {
+		const location = e.latLng;
+		console.log(markers)
+		const marks = [...markers, location]
+		setMarkers(marks);
+	  };
+	  
+const onLoadManager = drawingManager => {
+	console.log(drawingManager)
+  }
+  
+  const onPolygonComplete = polygon => {
+	console.log(polygon)
+  }
+console.log(Circle(),"dsds")
 	return isLoaded ? (
-		
-		
+
+
 		<GoogleMap
 			mapContainerStyle={containerStyle}
 			center={center}
 			zoom={10}
 			onLoad={onLoad}
 			onUnmount={onUnmount}
+			
+			onClick={handleMapClick
+		}
 		>
 			{coordinates()}
 
 			{paths.slice(0, 10).map(
 				path => {
-					return <Polygon
+					// return (<Polygon
 
-						path={path}
-						key={paths.indexOf(path) + 1}
-						onMouseOver={handleMouseOver}
-						onMouseOut={handleMouseOut}
-						onUnmount={onUnmount}
-						onLoad={onLoadPoly}
+					// 	path={path}
+					// 	key={paths.indexOf(path) + 1}
+					// 	onMouseOver={handleMouseOver}
+					// 	onMouseOut={handleMouseOut}
+					// 	onUnmount={onUnmount}
+					// 	onLoad={onLoadPoly}
+					// 	clickable={true}
+					// 	title="I am Marker"
+					// 	options={{
+					// 		polygonKey: paths.indexOf(path) + 1,
+					// 		strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+					// 		strokeOpacity: 0.8,
+					// 		strokeWeight: 2,
+					// 		fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+					// 		fillOpacity: 0.35,
+					// 		draggable: true,
+					// 		geodesic: true,
+					// 		tooltipText : "dsds"
 
-						options={{
-							polygonKey: paths.indexOf(path) + 1,
-							strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
-							strokeOpacity: 0.8,
-							strokeWeight: 2,
-							fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
-							fillOpacity: 0.35,
-							draggable: true,
-							geodesic: true,
-						}}
+					// 	}}
 
-						onClick={() => {
-							console.log(paths.indexOf(path))
-						}}
-					/>
+					// >
+					
+								<DrawingManager
+								onLoad={onLoadManager}
+     							 onPolygonComplete={onPolygonComplete}
+								 drawingMode = {Circle}
+								 drawingControl = {true}
+								
+							  />
+							  {/* );
+						}
+						)} */}
+						
+					// </Polygon>);
+
+
 				}
 
 			)}
@@ -138,4 +176,4 @@ const SimpleMap = (props) => {
 
 
 
-export { SimpleMap};
+export { SimpleMap };

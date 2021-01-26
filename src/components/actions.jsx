@@ -19,12 +19,12 @@ export const addColorForPoly = (globalState, payload) =>{
 
 export const addNameForPoly = (globalState, payload) =>{
     const list = [...globalState.state.polygonsNames, payload];
-   globalState.setState({polygonsColors: list})
+   globalState.setState({polygonsNames: list})
 
 }
 
 export const changeNameForPoly = (globalState, id, payload) =>{
     let names = [...globalState.state.polygonsNames];
     names[id] = {...names[id], payload};
-    globalState.setState({polygonsColors: names });
+    globalState.setState({polygonsNames: names });
 }

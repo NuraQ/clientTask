@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+<script type="text/javascript"
+src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
 ReactDOM.render(
   <React.StrictMode>
     <App />
