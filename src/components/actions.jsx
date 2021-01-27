@@ -28,3 +28,7 @@ export const changeNameForPoly = (globalState, id, payload) =>{
     names[id] = {...names[id], payload};
     globalState.setState({polygonsNames: names });
 }
+export const addNewPoly = (globalState, payload) => {
+    globalState.setState({polygonAddedToMap: payload})
+    console.log(globalState.state.polygonAddedToMap)
+}

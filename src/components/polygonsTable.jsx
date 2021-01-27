@@ -18,12 +18,11 @@ function select(id, show) {
 const RenderTable = (props) => {
 	const changedRow = useRef(null);
 	const [globalState, globalActions] = useGlobal()
-	const list = props.properties.slice(0, 10).map((ele, index) =>
+	const list = props.properties.map((ele, index) =>
 		<tr onMouseOver={() => { ShowPolygonfromMap(ele.OBJECTID) }} key={ele.OBJECTID} id={ele.OBJECTID}>
 			<td >{ele.OBJECTID}</td>
 			<td><input defaultValue={ele.Shape__Area}  ></input></td>
 			<td>{ele.Shape__Length}</td>
-			<td><button onClick={e => alert(e.target.value)} >Update</button></td>
 			<td><input defaultValue={globalState.polygonsColors[index]} id = {index} onChange={updateColor}></input></td>
 			{/* <td><input defaultValue={globalState.polygonsNames[index]} id = {index} ></input></td> */}
 
@@ -43,9 +42,6 @@ const RenderTable = (props) => {
 	function ShowPolygonfromMap(id) {
 		globalActions.setPoly(id)
 	}
-
-	useEffect(() => {
-	}, [globalState.polygonsColors])
 
 	return (
 		<div>

@@ -6,7 +6,8 @@ import * as actions from "./actions";
 const initialState = {
     hoveredPoly: 0,
     polygonsColors: [],
-    polygonsNames: []
+    polygonsNames: [],
+    polygonAddedToMap: null
     
 }
 

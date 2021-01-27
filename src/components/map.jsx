@@ -2,9 +2,8 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { GoogleMap, LoadScript, OverlayView, useJsApiLoader } from '@react-google-maps/api';
 import { Polygon, Marker } from '@react-google-maps/api';
 import useGlobal from './globalState.jsx';
-//   import { DrawingManager } from '@react-google-maps/api';
-import { useLoadScript } from '@react-google-maps/api'
-  const ScriptLoaded = require("@react-google-maps/api/src/docs/ScriptLoaded").default;
+import { DrawingManager } from '@react-google-maps/api';
+//   const ScriptLoaded = require("@react-google-maps/api/src/docs/ScriptLoaded").default;
 
 import './marker.css'
 
@@ -15,7 +14,8 @@ const containerStyle = {
 	height: '700px'
 };
 
- // drawingManager.setMap(map);
+// drawingManager.setMap(map);
+
 
 const SimpleMap = (props) => {
 	const [globalState, globalActions] = useGlobal()
@@ -26,12 +26,16 @@ const SimpleMap = (props) => {
 	};
 	const { isLoaded } = useJsApiLoader({
 		id: 'google-map-script',
-		googleMapsApiKey: 'AIzaSyDeL9AfH6JB5TdYWWVH4WRoVmti-zFHM_g'
+		googleMapsApiKey: 'AIzaSyDeL9AfH6JB5TdYWWVH4WRoVmti-zFHM_g',
+		libraries: ['drawing']
+
 	})
 
 	const [map, setMap] = React.useState(null)
 	const [polygons, setPolygons] = React.useState([])
 	const [polygonColor, setPolygonColor] = React.useState([])
+	const [drawnPolygonsPaths, setNewPaths] = React.useState([[]])
+	 const [newPaths, setPaths] = React.useState([[]])
 
 
 	const onLoad = React.useCallback(function callback(map) {
@@ -99,17 +103,22 @@ const SimpleMap = (props) => {
 		console.log(markers)
 		const marks = [...markers, location]
 		setMarkers(marks);
-	  };
-	  
-const onLoadManager = drawingManager => {
-	console.log(drawingManager)
-  }
-  
-  const onPolygonComplete = polygon => {
-	console.log(polygon)
-  }
-	return isLoaded ? (
+	};
 
+	const onLoadManager = drawingManager => {
+		console.log("sthx")
+		console.log(drawingManager, "drawing maang")
+	}
+
+	const onPolygonComplete = polygon => {
+		console.log("poly",polygon.getPath().getArray())
+		paths.push(polygon.getPath().getArray())
+		paths = [...paths, polygon.getPath().getArray()]
+		setNewPaths(paths)
+		globalActions.addNewPoly({OBJECTID: 5902,Shape__Area:332,Shape__Length: 3232})
+		
+	}
+	return isLoaded ? (
 
 		<GoogleMap
 			mapContainerStyle={containerStyle}
@@ -117,48 +126,45 @@ const onLoadManager = drawingManager => {
 			zoom={10}
 			onLoad={onLoad}
 			onUnmount={onUnmount}
-			
+
 			onClick={handleMapClick
-		}
+			}
 		>
-				<DrawingManager
-								  drawingControl = {true}
-								
-							  />
+			<DrawingManager
+				drawingControl={true}
+				onLoad = {onLoadManager}
+				onPolygonComplete = {onPolygonComplete}
+				onRectangleComplete = {onPolygonComplete}
+				onPolylineComplete = {onPolygonComplete}
+			/>
 			{coordinates()}
 
-			{paths.slice(0, 10).map(
+			{paths.map(
 				path => {
-					// return (<Polygon
+					return (<Polygon
 
-					// 	path={path}
-					// 	key={paths.indexOf(path) + 1}
-					// 	onMouseOver={handleMouseOver}
-					// 	onMouseOut={handleMouseOut}
-					// 	onUnmount={onUnmount}
-					// 	onLoad={onLoadPoly}
-					// 	clickable={true}
-					// 	title="I am Marker"
-					// 	options={{
-					// 		polygonKey: paths.indexOf(path) + 1,
-					// 		strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
-					// 		strokeOpacity: 0.8,
-					// 		strokeWeight: 2,
-					// 		fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
-					// 		fillOpacity: 0.35,
-					// 		draggable: true,
-					// 		geodesic: true,
-					// 		tooltipText : "dsds"
+						path={path}
+						key={paths.indexOf(path) + 1}
+						onMouseOver={handleMouseOver}
+						onMouseOut={handleMouseOut}
+						onUnmount={onUnmount}
+						onLoad={onLoadPoly}
+						clickable={true}
+						options={{
+							polygonKey: paths.indexOf(path) + 1,
+							strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+							strokeOpacity: 0.8,
+							strokeWeight: 2,
+							fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+							fillOpacity: 0.35,
+							draggable: true,
+							geodesic: true,
+							tooltipText : "dsds"
 
-					// 	}}
+						}}
 
-					// >
-							
-							  {/* );
-						}
-						)} */}
-						
-					// </Polygon>);
+					>
+					</Polygon>);
 
 
 				}

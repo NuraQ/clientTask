@@ -55,8 +55,19 @@ export default function Controller() {
         setPropertiesTable()
     }, [featuresData])
 
-    function setPropertiesTable() {
+    useEffect(() => {
+        // appendNewDrawnPolygonsToTable()
+        console.log("appended poly", properties )
+        if (globalState.polygonAddedToMap != null){
+            
+            let newTable = [...properties,[globalState.PolygonAddedToMap]]
+            let color = colors[Math.floor(Math.random() * colors.length)];
+            globalActions.addColorForPoly(color);
+            setProperties(newTable)
+            }    
+        }, [globalState.polygonAddedToMap])
 
+    function setPropertiesTable() {
         globalActions.addColorForPoly()
         const propertiesData = [];
         featuresData.forEach(property => {
@@ -65,11 +76,21 @@ export default function Controller() {
             let name = names[Math.floor(Math.random() * names.length)];
             globalActions.addColorForPoly(color);
             globalActions.addNameForPoly(name)
-
         });
         setProperties(propertiesData);
     }
 
+    function appendNewDrawnPolygonsToTable(){
+        console.log(globalState.PolygonAddedToMap,"testtststststs")
+        if (globalState.PolygonAddedToMap != null){
+            
+        let newTable = [...properties,[globalState.PolygonAddedToMap]]
+        let color = colors[Math.floor(Math.random() * colors.length)];
+        globalActions.addColorForPoly(color);
+        setProperties(newTable)
+        console.log("daaaaaaah")
+        }
+    }
     function displayInTable(id, show) {
         select(id, show);
     }
