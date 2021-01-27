@@ -1,3 +1,5 @@
+
+  
 import React, { useState, useEffect } from 'react';
 
 import { SimpleMap } from './components/map'
@@ -10,8 +12,24 @@ import { select } from './components/polygonsTable'
 export default function Controller() {
     const [featuresData, setFeatures] = React.useState([])
     const [properties, setProperties] = React.useState([])
-    const [globalState,globalActions] = useGlobal()
-    const colors = ["#FFE4C4","#5F9EA0","#008B8B","#006400","#556B2F","#ADD8E6","#F5F5F5"]
+    const [globalState,globalActions] = useGlobal();
+
+
+    const colors = ["#FFE4C4","#5F9EA0","#008B8B","#006400","#556B2F","#ADD8E6","#F5F5F5","#F0F8FF","#B22222"]
+    const names = [  "Bruce","Cook",
+    "Carolyn","Morgan",
+    "Albert","Walker",
+    "Randy","Reed",
+    "Larry","Barnes",
+    "Lois","Wilson",
+    "Jesse","Campbell",
+    "Ernest","Rogers",
+    "Theresa","Patterson",
+    "Henry","Simmons",
+    "Michelle","Perry",
+    "Frank","Butler",
+    "Shirley"]
+
     useEffect(() => {
         // Update the document title using the browser API
         function fetchData() {
@@ -38,20 +56,22 @@ export default function Controller() {
     }, [featuresData])
 
     function setPropertiesTable() {
+
+        globalActions.addColorForPoly()
         const propertiesData = [];
         featuresData.forEach(property => {
-            propertiesData.push(property.properties)
-            var color = colors[Math.floor(Math.random() * colors.length)];
-            console.log("uuuu")
-            globalActions.addColorForPoly(color)
+            propertiesData.push(property.properties);
+            let color = colors[Math.floor(Math.random() * colors.length)];
+            let name = names[Math.floor(Math.random() * names.length)];
+            globalActions.addColorForPoly(color);
+            globalActions.addNameForPoly(name)
 
         });
         setProperties(propertiesData);
-        console.log(properties)
     }
 
     function displayInTable(id, show) {
-        select(id, show)
+        select(id, show);
     }
 
     return (

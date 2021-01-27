@@ -5,7 +5,9 @@ import * as actions from "./actions";
 
 const initialState = {
     hoveredPoly: 0,
-    polygonsColors : [""]
+    polygonsColors: [],
+    polygonsNames: []
+    
 }
 
 const useGlobal = globalHook(React,initialState,actions)

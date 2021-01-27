@@ -1,19 +1,25 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
-import { Polygon } from '@react-google-maps/api';
-import useGlobal from './globalState';
+import { GoogleMap, LoadScript, OverlayView, useJsApiLoader } from '@react-google-maps/api';
+import { Polygon, Marker } from '@react-google-maps/api';
+import useGlobal from './globalState.jsx';
+//   import { DrawingManager } from '@react-google-maps/api';
+import { useLoadScript } from '@react-google-maps/api'
+  const ScriptLoaded = require("@react-google-maps/api/src/docs/ScriptLoaded").default;
 
 import './marker.css'
+
+const libraries = ["drawing"];
 
 const containerStyle = {
 	width: '700px',
 	height: '700px'
 };
 
+ // drawingManager.setMap(map);
 
 const SimpleMap = (props) => {
-	const [globalState,globalActions] = useGlobal()
-
+	const [globalState, globalActions] = useGlobal()
+	const [markers, setMarkers] = useState([])
 	const center = {
 		lat: -73.9130656659264,
 		lng: 40.55849125972
@@ -49,7 +55,7 @@ const SimpleMap = (props) => {
 					ele.geometry.coordinates.map(
 						coord => {
 							for (var k = 0; k < coord.length; k++) {
-								paths[i].push({ lat: parseFloat(coord[k][0]), lng: parseFloat(coord[k][1]) })
+								paths[i].push({ lat: parseFloat(coord[k][0]), lng: parseFloat(coord[k][1]) });
 
 							}
 						}
@@ -60,75 +66,101 @@ const SimpleMap = (props) => {
 		}
 	}
 	function handleMouseOver(e) {
-//		setPolygonColor(this.fillColor)
-		console.log(this.color)
+		//		setPolygonColor(this.fillColor)
 		this.setOptions({ fillColor: "Blue" });
-		props.mapper(this.polygonKey, true)
+		props.mapper(this.polygonKey, true);
 	}
 	function handleMouseOut(e) {
-		this.setOptions({ fillColor: "#FF0000" });
-		props.mapper(this.polygonKey, false)
+		this.setOptions({ fillColor: globalState.polygonsColors[this.polygonKey] });
+		props.mapper(this.polygonKey, false);
 	}
 	const polygonsArray = []
 	const onLoadPoly = useCallback(
 		polygon => {
-			polygonsArray.push(polygon)
-			setPolygons(polygonsArray)
+			polygonsArray.push(polygon);
+			setPolygons(polygonsArray);
 		},
 		[]
 	);
-	useEffect(()=>{
-		console.log("ylla")
+	useEffect(() => {
 		showPolygonFromMap()
-	},[globalState.hoveredPoly,polygonsArray])
+	}, [globalState.hoveredPoly, polygonsArray, globalState.polygonsColors]);
 
-	function showPolygonFromMap()  {
+	function showPolygonFromMap() {
 		let polyId = globalState.hoveredPoly
-		if (polygons[polyId] != null){ 
-		polygons[polyId].setOptions({fillColor: "Blue"})
-		console.log("Dsdsdsdsds")
-		console.log((polygons[polyId].fillColor))
-		setMap(polygons[polyId])
+		if (polygons[polyId] != null) {
+			polygons[polyId].setOptions({ fillColor: "Blue" });
+			setMap(polygons[polyId])
 		}
 	}
 
+	const handleMapClick = (e) => {
+		const location = e.latLng;
+		console.log(markers)
+		const marks = [...markers, location]
+		setMarkers(marks);
+	  };
+	  
+const onLoadManager = drawingManager => {
+	console.log(drawingManager)
+  }
+  
+  const onPolygonComplete = polygon => {
+	console.log(polygon)
+  }
+	return isLoaded ? (
 
-	return isLoaded ? (		
+
 		<GoogleMap
 			mapContainerStyle={containerStyle}
 			center={center}
 			zoom={10}
 			onLoad={onLoad}
 			onUnmount={onUnmount}
+			
+			onClick={handleMapClick
+		}
 		>
+				<DrawingManager
+								  drawingControl = {true}
+								
+							  />
 			{coordinates()}
 
 			{paths.slice(0, 10).map(
 				path => {
-					return <Polygon
+					// return (<Polygon
 
-						path={path}
-						key={paths.indexOf(path) + 1}
-						onMouseOver={handleMouseOver}
-						onMouseOut={handleMouseOut}
-						onUnmount={onUnmount}
-						onLoad={onLoadPoly}
+					// 	path={path}
+					// 	key={paths.indexOf(path) + 1}
+					// 	onMouseOver={handleMouseOver}
+					// 	onMouseOut={handleMouseOut}
+					// 	onUnmount={onUnmount}
+					// 	onLoad={onLoadPoly}
+					// 	clickable={true}
+					// 	title="I am Marker"
+					// 	options={{
+					// 		polygonKey: paths.indexOf(path) + 1,
+					// 		strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+					// 		strokeOpacity: 0.8,
+					// 		strokeWeight: 2,
+					// 		fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+					// 		fillOpacity: 0.35,
+					// 		draggable: true,
+					// 		geodesic: true,
+					// 		tooltipText : "dsds"
 
-						options={{
-							polygonKey: paths.indexOf(path) + 1,
-							strokeColor: "#FF0000",
-							strokeOpacity: 0.8,
-							strokeWeight: 2,
-							fillColor: "#FF0000",
-							fillOpacity: 0.35,
-							draggable: true,
-							geodesic: true,
-						}}
+					// 	}}
 
-						onClick={() => {
-							console.log(paths.indexOf(path))
-						}}
-					/>
+					// >
+							
+							  {/* );
+						}
+						)} */}
+						
+					// </Polygon>);
+
+
 				}
 
 			)}
@@ -141,4 +173,4 @@ const SimpleMap = (props) => {
 
 
 
-export { SimpleMap};
+export { SimpleMap };
