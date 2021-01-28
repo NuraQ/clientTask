@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 
 export const setPoly = (globalState, payload) =>{
     globalState.setState({hoveredPoly: payload})
@@ -26,7 +25,6 @@ export const changeNameForPoly = (globalState, id, payload) =>{
     let names = [...globalState.state.polygonsNames];
     names[id] = payload
     globalState.setState({polygonsNames: names });
-    console.log(globalState.state.polygonsNames[1], "klkl")
 }
 export const addNewPoly = (globalState, payload) => {
     globalState.setState({polygonAddedToMap: payload})

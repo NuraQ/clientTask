@@ -33,7 +33,6 @@ const RenderTable = (props) => {
 		changedRow.current = {val: e.target.value, id: e.target.id}
 	}
 	function updateName(e) {
-		console.log(e.target.value, "uouououos")
 		globalActions.changeNameForPoly( e.target.id, e.target.value )
 	}
 	useEffect(() => {

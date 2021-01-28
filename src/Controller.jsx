@@ -109,15 +109,7 @@ export default function Controller() {
     }, [featuresData])
 
     useEffect(() => {
-        // appendNewDrawnPolygonsToTable()
-        console.log("appended poly", properties )
-        if (globalState.polygonAddedToMap != null){
-            
-            let newTable = [...properties,[globalState.PolygonAddedToMap]]
-            let color = colors[Math.floor(Math.random() * colors.length)];
-            globalActions.addColorForPoly(color);
-            setProperties(newTable)
-            }    
+        appendNewDrawnPolygonsToTable()    
         }, [globalState.polygonAddedToMap])
 
     function setPropertiesTable() {

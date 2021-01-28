@@ -1,9 +1,6 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { GoogleMap, LoadScript, OverlayView, useJsApiLoader } from '@react-google-maps/api';
-import { Polygon, Marker } from '@react-google-maps/api';
+import React, { useState, useCallback, useEffect } from 'react';
+import { GoogleMap, useJsApiLoader,InfoBox, DrawingManager, Polygon } from '@react-google-maps/api';
 import useGlobal from './globalState.jsx';
-import { DrawingManager } from '@react-google-maps/api';
-import { InfoBox, InfoWindow } from '@react-google-maps/api';
 //   const ScriptLoaded = require("@react-google-maps/api/src/docs/ScriptLoaded").default;
 
 import './marker.css'
@@ -14,10 +11,6 @@ const containerStyle = {
 	width: '700px',
 	height: '700px'
 };
-
-// drawingManager.setMap(map);
-
-
 const SimpleMap = (props) => {
 	const [globalState, globalActions] = useGlobal()
 	const [marker, setMarker] = useState(null)
@@ -29,9 +22,7 @@ const SimpleMap = (props) => {
 		id: 'google-map-script',
 		googleMapsApiKey: 'AIzaSyDeL9AfH6JB5TdYWWVH4WRoVmti-zFHM_g',
 		libraries: libraries
-
 	})
-
 	const [map, setMap] = React.useState(null)
 	const [polygons, setPolygons] = React.useState([])
 	const [drawnPolygonsPaths, setNewPaths] = React.useState([[]])
@@ -48,7 +39,6 @@ const SimpleMap = (props) => {
 	}, [])
 	var paths = [[]]
 	var i = 0
-	var k = 0
 	const coordinates = () => {
 		{
 			props.pos.map(
@@ -79,7 +69,6 @@ const SimpleMap = (props) => {
 		props.mapper(this.polygonKey, false);
 		 setMarker(null);
 		 this.setOptions({ fillColor: globalState.polygonsColors[this.polygonKey] });
-
 	}
 	
 	const polygonsArray = []
@@ -102,15 +91,12 @@ const SimpleMap = (props) => {
 		}
 	}
 
-	const onLoadManager = drawingManager => {
-		console.log(drawingManager, "drawing maang")
-	}
 
 	const onPolygonComplete = polygon => {
 		paths.push(polygon.getPath().getArray())
 		paths = [...paths, polygon.getPath().getArray()]
 		setNewPaths(paths)
-		globalActions.addNewPoly({ OBJECTID: 5902, Shape__Area: 332, Shape__Length: 3232 })
+		globalActions.addNewPoly({ OBJECTID: polygonsArray.length, Shape__Area: 332, Shape__Length: 3232 })
 	}
 	return isLoaded ? (
 		<GoogleMap
@@ -133,7 +119,6 @@ const SimpleMap = (props) => {
 			 : <div></div>}
 			<DrawingManager
 				drawingControl={true}
-				onLoad={onLoadManager}
 				onPolygonComplete={onPolygonComplete}
 				onRectangleComplete={onPolygonComplete}
 				onPolylineComplete={onPolygonComplete}
