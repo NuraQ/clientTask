@@ -7,7 +7,7 @@ export const setPoly = (globalState, payload) =>{
 
 export const changeColorForPoly = (globalState, id, payload) =>{
     let colors = [...globalState.state.polygonsColors];
-    colors[id] = {...colors[id], payload};
+    colors[id] = payload
     globalState.setState({polygonsColors: colors });
 }
 
@@ -20,13 +20,13 @@ export const addColorForPoly = (globalState, payload) =>{
 export const addNameForPoly = (globalState, payload) =>{
     const list = [...globalState.state.polygonsNames, payload];
    globalState.setState({polygonsNames: list})
-
 }
 
 export const changeNameForPoly = (globalState, id, payload) =>{
     let names = [...globalState.state.polygonsNames];
-    names[id] = {...names[id], payload};
+    names[id] = payload
     globalState.setState({polygonsNames: names });
+    console.log(globalState.state.polygonsNames[1], "klkl")
 }
 export const addNewPoly = (globalState, payload) => {
     globalState.setState({polygonAddedToMap: payload})

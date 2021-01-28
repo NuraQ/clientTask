@@ -5,3 +5,17 @@ td {
     border: 1px solid rgb(2, 1, 1);
     padding: 8px;
 }
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+tr:nth-child(even):hover {
+    background-color: blanchedalmond;
+}
+.Header {
+    background-color: brown;
+    color: cornsilk;
+}
+table{
+    padding-top: 20px;
+    padding-left: 20px;
+}

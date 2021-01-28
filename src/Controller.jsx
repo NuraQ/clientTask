@@ -15,7 +15,60 @@ export default function Controller() {
     const [globalState,globalActions] = useGlobal();
 
 
-    const colors = ["#FFE4C4","#5F9EA0","#008B8B","#006400","#556B2F","#ADD8E6","#F5F5F5","#F0F8FF","#B22222"]
+    const colors = [  "AliceBlue",
+    "Aqua",  "Aquamarine",
+    "BlanchedAlmond","BlueViolet",
+    "Brown","BurlyWood",
+    "DarkGreen","DarkKhaki",
+    "DarkMagenta",  "DarkOliveGreen",
+    "DarkOrange",
+    "DarkOrchid","DarkRed",
+    "DarkSalmon",  "DarkSeaGreen",
+    "DarkSlateBlue","DarkSlateGrey",
+    "DarkTurquoise", "DarkViolet",
+    "DeepPink",
+    "Gold",  "GoldenRod",
+    "Green","HotPink",
+    "IndianRed", "Indigo",
+    "Ivory", "Khaki",
+    "LavenderBlush",  "LawnGreen",
+    "LemonChiffon",   "LightBlue",
+    "LightCoral", "LightCyan",
+    "LightGoldenRodYellow",  "LightGray",
+    "LightGrey","LightGreen",
+    "LightPink", "LightSalmon",
+    "LightSeaGreen","LightSkyBlue",
+    "LightSlateGray", "LightSlateGrey",
+    "LightSteelBlue", "LightYellow",
+    "Lime","LimeGreen",
+    "Linen", "Magenta",
+    "Maroon", "MediumAquaMarine",
+    "MediumBlue", "MediumOrchid",
+    "MediumPurple","MediumSeaGreen",
+    "MediumSlateBlue","MediumSpringGreen",
+    "MediumTurquoise", "MediumVioletRed",
+    "MidnightBlue", 
+    "MistyRose","Moccasin",
+    "NavajoWhite",  "Navy",
+    "OliveDrab","Orange",
+    "OrangeRed","Orchid",
+    "PaleGoldenRod","PaleGreen",
+    "PaleTurquoise","PaleVioletRed",
+    "PapayaWhip","PeachPuff",
+     "Peru", "Pink", 
+    "Purple","RebeccaPurple",
+    "Red","RosyBrown",
+    "RoyalBlue","SaddleBrown",
+    "Salmon", "SandyBrown",
+    "SeaGreen","SeaShell",
+    "SkyBlue","SlateBlue",
+    "SlateGray","SlateGrey",
+    "SteelBlue",  "Tan",
+    "Teal", "Thistle",
+    "Tomato","Turquoise",
+    "Violet","Wheat",
+"Yellow","YellowGreen",
+  ];
     const names = [  "Bruce","Cook",
     "Carolyn","Morgan",
     "Albert","Walker",
@@ -81,14 +134,11 @@ export default function Controller() {
     }
 
     function appendNewDrawnPolygonsToTable(){
-        console.log(globalState.PolygonAddedToMap,"testtststststs")
-        if (globalState.PolygonAddedToMap != null){
-            
+        if (globalState.PolygonAddedToMap != null){        
         let newTable = [...properties,[globalState.PolygonAddedToMap]]
         let color = colors[Math.floor(Math.random() * colors.length)];
         globalActions.addColorForPoly(color);
         setProperties(newTable)
-        console.log("daaaaaaah")
         }
     }
     function displayInTable(id, show) {
