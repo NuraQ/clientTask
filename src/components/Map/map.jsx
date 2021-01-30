@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader,InfoBox, DrawingManager, Polygon } from '@react-google-maps/api';
-import useGlobal from './globalState.jsx';
-//   const ScriptLoaded = require("@react-google-maps/api/src/docs/ScriptLoaded").default;
+import useGlobal from '../store/globalState';
+import { TablePagination } from '@material-ui/core';
 
-import './marker.css'
 
 const libraries = ['drawing'];
-
 const containerStyle = {
 	width: '700px',
 	height: '700px'
@@ -60,7 +58,7 @@ const SimpleMap = (props) => {
 	function handleMouseOver(e) {
 		props.mapper(this.polygonKey, true);
 		const location = e.latLng;
-		center = {location}
+		center = {location};
 		setMarker({location: location, key: this.polygonKey});
 		this.setOptions({ fillColor: "Blue" });
 	}
@@ -124,7 +122,7 @@ const SimpleMap = (props) => {
 				onPolylineComplete={onPolygonComplete}
 			/>
 			{coordinates()}
-			{paths.slice(0, 10).map(
+			{paths.map(
 				path => {
 					return (
 						<div>

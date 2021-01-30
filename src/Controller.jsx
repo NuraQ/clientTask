@@ -2,11 +2,10 @@
   
 import React, { useState, useEffect } from 'react';
 
-import { SimpleMap } from './components/map'
-import useGlobal from './components/globalState';
+import { SimpleMap } from './components/Map/map'
+import useGlobal from './components/store/globalState';
  
-import { RenderTable } from './components/polygonsTable'
-import { select } from './components/polygonsTable'
+import { RenderTable, select } from './components/PolygonsTable/polygonsTable'
 
 
 export default function Controller() {
