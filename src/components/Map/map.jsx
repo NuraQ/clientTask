@@ -27,24 +27,24 @@ const SimpleMap = (props) => {
 	const onLoad = React.useCallback(function callback(map) {
 		const bounds = new window.google.maps.LatLngBounds();
 		map.fitBounds(bounds);
-		setMap(map)
-
+		setMap(map);
 	}, [])
 
-	const onUnmount = React.useCallback(function callback(map) {
-		setMap(null)
+	const onUnmount = React.useCallback((map) => {
+		setMap(null);
 	}, [])
 
 	const coordinates = () => {
 		const newPath = props.pos.map((entry) => {
-			return {location: entry.geometry.coordinates[0].map((e) => {
-				return {
-					lat: parseFloat(e[1]),
-					lng: parseFloat(e[0])
-				
-				}
-			}), id: entry.id
-		}
+			return {
+				location: entry.geometry.coordinates[0].map((e) => {
+					return {
+						lat: parseFloat(e[1]),
+						lng: parseFloat(e[0])
+					}
+				}),
+				id: entry.id
+			}
 		});
 
 		return newPath;
@@ -53,14 +53,21 @@ const SimpleMap = (props) => {
 	function handleMouseOver(e) {
 		props.mapper(this.polygonKey, true);
 		const location = e.latLng;
-		setMarker({location: location, key: this.polygonKey});
-		this.setOptions({ fillColor: "Blue" });
+		setMarker({
+			location: location,
+			key: this.polygonKey
+		});
+		this.setOptions({ 
+			fillColor: "Blue" 
+		});
 	}
 
 	function handleMouseOut(e) {
 		props.mapper(this.polygonKey, false);
-		 setMarker(null);
-		 this.setOptions({ fillColor: globalState.polygonsColors[this.polygonKey] });
+		setMarker(null);
+		this.setOptions({ 
+			fillColor: globalState.polygonsColors[this.polygonKey]
+		 });
 	}
 	
 	const polygonsArray = []
@@ -79,17 +86,21 @@ const SimpleMap = (props) => {
 	function showPolygonFromMap() {
 		let polyId = globalState.hoveredPoly
 		if (polygons[polyId - 1] != null) {
-			polygons[polyId - 1].setOptions({ fillColor: "Blue" });
+			polygons[polyId - 1].setOptions({
+				 fillColor: "Blue" 
+				});
 			setMap(polygons[polyId - 1])
 		}
 	}
 
 
 	const onPolygonComplete = polygon => {
-		paths.push(polygon.getPath().getArray())
-		paths = [...paths, polygon.getPath().getArray()]
-		setNewPaths(paths)
-		globalActions.addNewPoly({ OBJECTID: polygonsArray.length, Shape__Area: 332, Shape__Length: 3232 })
+		paths.push(polygon.getPath().getArray());
+		paths = [...paths, polygon.getPath().getArray()];
+		setNewPaths(paths);
+		globalActions.addNewPoly({
+			 OBJECTID: polygonsArray.length, Shape__Area: 332, Shape__Length: 3232 
+			});
 	}
 	
 	const paths = coordinates();

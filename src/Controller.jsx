@@ -9,10 +9,8 @@ import { RenderTable, select } from './components/PolygonsTable/polygonsTable'
 
 
 export default function Controller() {
-    const [properties, setProperties] = React.useState([])
+    const [properties, setProperties] = React.useState([]);
     const [globalState,globalActions] = useGlobal();
-
-
     const colors = [  "AliceBlue",
     "Aqua",  "Aquamarine",
     "BlanchedAlmond","BlueViolet",
@@ -94,9 +92,8 @@ export default function Controller() {
             ).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        // setFeatures(json.features)
-                        globalActions.setAllPolys(json.features)
-                        console.log("AL;", globalState.allPolygonsData)
+                        globalActions.setAllPolys(json.features);
+                        console.log("AL;", globalState.allPolygonsData);
 
                     })
                 }
@@ -106,15 +103,15 @@ export default function Controller() {
     }, []);
 
     useEffect(() => {
-        setPropertiesTable()
+        setPropertiesTable();
     }, [globalState.allPolygonsData])
 
     useEffect(() => {
-        appendNewDrawnPolygonsToTable()    
-        }, [globalState.polygonAddedToMap])
+        appendNewDrawnPolygonsToTable();    
+        }, [globalState.polygonAddedToMap]);
 
     function setPropertiesTable() {
-        globalActions.addColorForPoly()
+        globalActions.addColorForPoly();
         const propertiesData = [];
         globalState.allPolygonsData.forEach(property => {
             let colorr = colors[Math.floor(Math.random() * colors.length)];
@@ -126,10 +123,10 @@ export default function Controller() {
 
     function appendNewDrawnPolygonsToTable(){
         if (globalState.PolygonAddedToMap != null){        
-        let newTable = [...properties,[globalState.PolygonAddedToMap]]
+        let newTable = [...properties,[globalState.PolygonAddedToMap]];
         let color = colors[Math.floor(Math.random() * colors.length)];
         globalActions.addColorForPoly(color);
-        setProperties(newTable)
+        setProperties(newTable);
         }
     }
     function displayInTable(id, show) {

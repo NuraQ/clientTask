@@ -1,7 +1,6 @@
 
 export const setPoly = (globalState, payload) =>{
-    globalState.setState({hoveredPoly: payload})
-
+    globalState.setState({hoveredPoly: payload});
 }
 
 export const setAllPolys = (globalState, payload) =>{
@@ -10,14 +9,13 @@ export const setAllPolys = (globalState, payload) =>{
 
 export const changeColorForPoly = (globalState, id, payload) =>{
     let colors = [...globalState.state.polygonsColors];
-    colors[id] = payload
+    colors[id] = payload;
     globalState.setState({polygonsColors: colors });
 }
 
 export const addColorForPoly = (globalState, payload) =>{
     const list = [...globalState.state.polygonsColors, payload];
    globalState.setState({polygonsColors: list});
-
 }
 
 export const addNameForPoly = (globalState, payload) =>{
@@ -32,14 +30,11 @@ export const changeNameForPoly = (globalState, id, payload) =>{
 }
 export const addNewPoly = (globalState, payload) => {
     globalState.setState({polygonAddedToMap: payload})
-    console.log(globalState.state.polygonAddedToMap)
 }
 export const removePoly = (globalState, payload) => {
     const allPolys = [...globalState.state.allPolygonsData]
-    console.log("PAYLOAD",payload)
     for (var i = 0 ; i < allPolys.length; i++){
         if(allPolys[i].id == payload){
-            console.log("DELETED")
             allPolys.splice(i, 1);
             globalState.setState({allPolygonsData: allPolys });
             return

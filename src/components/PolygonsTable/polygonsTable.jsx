@@ -13,18 +13,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 function select(id, show) {
-	var row = document.getElementById(id)
-	console.log("poly key", id)
-	console.log("ROW", row)
+	var row = document.getElementById(id);
 	if (row != null) {
-	var sty = row.style
-	if (show) {
-		row.style = "background-color: blanchedalmond";
-	} else {
-		row.style = "background-color: `${sty}`";
-
+		var sty = row.style
+		if (show) {
+			row.style = "background-color: blanchedalmond";
+		} else {
+			row.style = "background-color: `${sty}`";
+		}
 	}
-}
 }
 const useStyles = makeStyles({
 	root: {
@@ -36,10 +33,8 @@ const useStyles = makeStyles({
 });
 
 const RenderTable = (props) => {
-
-	//  console.log("PROPERTIRES ", props.properties[0])
 	const changedRow = useRef(null);
-	const [globalState, globalActions] = useGlobal()
+	const [globalState, globalActions] = useGlobal();
 
 	function updateColor(e) {
 		changedRow.current = { val: e.target.value, id: e.target.id }
@@ -51,15 +46,14 @@ const RenderTable = (props) => {
 		if (changedRow.current != null) {
 			globalActions.changeColorForPoly(changedRow.current.id, changedRow.current.val)
 		}
-	}, [changedRow.current])
+	}, [changedRow.current]);
 
 	function ShowPolygonfromMap(id) {
-		globalActions.setPoly(id)
+		globalActions.setPoly(id);
 	}
 
-	function deletePolygon(e){
-		console.log(e.currentTarget .id, "REMOVE")
-		globalActions.removePoly(e.currentTarget .id)
+	function deletePolygon(e) {
+		globalActions.removePoly(e.currentTarget.id);
 	}
 	const columns = [
 		{ id: 'name', label: 'Name', minWidth: 170 },
@@ -104,7 +98,7 @@ const RenderTable = (props) => {
 	};
 
 	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(+event.target.value);
+		setRowsPerPage(event.target.value);
 		setPage(0);
 	};
 
@@ -120,7 +114,9 @@ const RenderTable = (props) => {
 								<TableCell
 									key={column.id}
 									align={column.align}
-									style={{ minWidth: column.minWidth }}
+									style={{
+										minWidth: column.minWidth
+									}}
 								>
 									{column.label}
 								</TableCell>
@@ -130,7 +126,7 @@ const RenderTable = (props) => {
 					<TableBody>
 						{props.properties.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 							return (
-								<TableRow role="checkbox" tabIndex={-1} key={row.properties.OBJECTID} id = {row.properties.OBJECTID}>
+								<TableRow role="checkbox" tabIndex={-1} key={row.properties.OBJECTID} id={row.properties.OBJECTID}>
 									<TableCell >
 										{row.properties.OBJECTID}
 									</TableCell>
@@ -145,7 +141,7 @@ const RenderTable = (props) => {
 											defaultValue={row.color}
 											onChange={updateColor}
 											className={classes.input}
-											//  id={row.properties.OBJECTID}
+										//  id={row.properties.OBJECTID}
 										/>
 									</TableCell>
 									<TableCell >
@@ -153,11 +149,11 @@ const RenderTable = (props) => {
 											defaultValue={row.name}
 											onChange={updateName}
 											className={classes.input}
-											//  id={row.OBJECTID}
+										//  id={row.OBJECTID}
 										/>
 									</TableCell>
 									<TableCell>
-										<Button style = {{backgroundColor:"red"}} id = {row.properties.OBJECTID} onClick = {deletePolygon}>delete</Button>
+										<Button style={{ backgroundColor: "red" }} id={row.properties.OBJECTID} onClick={deletePolygon}>delete</Button>
 									</TableCell>
 								</TableRow>
 							);
