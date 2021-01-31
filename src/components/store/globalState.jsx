@@ -7,6 +7,7 @@ const initialState = {
     hoveredPoly: 0,
     polygonsColors: [],
     polygonsNames: [],
+    allPolygonsData: [],
     polygonAddedToMap: null
     
 }

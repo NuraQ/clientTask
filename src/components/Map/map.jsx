@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader,InfoBox, DrawingManager, Polygon } from '@react-google-maps/api';
 import useGlobal from '../store/globalState';
-import { TablePagination } from '@material-ui/core';
 
 
 const libraries = ['drawing'];
@@ -35,30 +34,25 @@ const SimpleMap = (props) => {
 	const onUnmount = React.useCallback(function callback(map) {
 		setMap(null)
 	}, [])
-	var paths = [[]]
-	var i = 0
-	const coordinates = () => {
-		{
-			props.pos.map(
-				(ele) => {
-					paths[i] = []
-					ele.geometry.coordinates.map(
-						coord => {
-							for (var k = 0; k < coord.length; k++) {
-								paths[i].push({ lat: parseFloat(coord[k][0]), lng: parseFloat(coord[k][1]) });
 
-							}
-						}
-					)
-					i = i + 1
+	const coordinates = () => {
+		const newPath = props.pos.map((entry) => {
+			return {location: entry.geometry.coordinates[0].map((e) => {
+				return {
+					lat: parseFloat(e[1]),
+					lng: parseFloat(e[0])
+				
 				}
-			)
+			}), id: entry.id
 		}
+		});
+
+		return newPath;
 	}
+	
 	function handleMouseOver(e) {
 		props.mapper(this.polygonKey, true);
 		const location = e.latLng;
-		center = {location};
 		setMarker({location: location, key: this.polygonKey});
 		this.setOptions({ fillColor: "Blue" });
 	}
@@ -77,6 +71,7 @@ const SimpleMap = (props) => {
 		},
 		[]
 	);
+
 	useEffect(() => {
 		showPolygonFromMap()
 	}, [globalState.hoveredPoly, polygonsArray, globalState.polygonsColors]);
@@ -96,10 +91,12 @@ const SimpleMap = (props) => {
 		setNewPaths(paths)
 		globalActions.addNewPoly({ OBJECTID: polygonsArray.length, Shape__Area: 332, Shape__Length: 3232 })
 	}
+	
+	const paths = coordinates();
+
 	return isLoaded ? (
 		<GoogleMap
 			mapContainerStyle={containerStyle}
-			center={center}
 			zoom={10}
 			onLoad={onLoad}
 			onUnmount={onUnmount}
@@ -121,25 +118,25 @@ const SimpleMap = (props) => {
 				onRectangleComplete={onPolygonComplete}
 				onPolylineComplete={onPolygonComplete}
 			/>
-			{coordinates()}
+
 			{paths.map(
 				path => {
 					return (
 						<div>
 							<Polygon
-								path={path}
-								key={paths.indexOf(path) + 1}
+								path={path.location}
+								key={path.id}
 								onMouseOver={handleMouseOver}
 								onMouseOut={handleMouseOut}
 								onUnmount={onUnmount}
 								onLoad={onLoadPoly}
 								clickable={false}
 								options={{
-									polygonKey: paths.indexOf(path) + 1,
-									strokeColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+									polygonKey: path.id,
+									strokeColor: globalState.polygonsColors[path.id],
 									strokeOpacity: 0.8,
 									strokeWeight: 2,
-									fillColor: globalState.polygonsColors[paths.indexOf(path) + 1],
+									fillColor: globalState.polygonsColors[path.id],
 									fillOpacity: 0.35,
 									draggable: true,
 									geodesic: true,
@@ -152,8 +149,4 @@ const SimpleMap = (props) => {
 		</GoogleMap>
 	) : <></>
 }
-
-
-
-
 export { SimpleMap };

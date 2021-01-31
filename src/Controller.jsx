@@ -9,7 +9,6 @@ import { RenderTable, select } from './components/PolygonsTable/polygonsTable'
 
 
 export default function Controller() {
-    const [featuresData, setFeatures] = React.useState([])
     const [properties, setProperties] = React.useState([])
     const [globalState,globalActions] = useGlobal();
 
@@ -95,7 +94,10 @@ export default function Controller() {
             ).then(response => {
                 if (response.ok) {
                     response.json().then(json => {
-                        setFeatures(json.features)
+                        // setFeatures(json.features)
+                        globalActions.setAllPolys(json.features)
+                        console.log("AL;", globalState.allPolygonsData)
+
                     })
                 }
             })
@@ -105,7 +107,7 @@ export default function Controller() {
 
     useEffect(() => {
         setPropertiesTable()
-    }, [featuresData])
+    }, [globalState.allPolygonsData])
 
     useEffect(() => {
         appendNewDrawnPolygonsToTable()    
@@ -114,7 +116,7 @@ export default function Controller() {
     function setPropertiesTable() {
         globalActions.addColorForPoly()
         const propertiesData = [];
-        featuresData.forEach(property => {
+        globalState.allPolygonsData.forEach(property => {
             propertiesData.push(property.properties);
             let color = colors[Math.floor(Math.random() * colors.length)];
             let name = names[Math.floor(Math.random() * names.length)];
@@ -139,7 +141,7 @@ export default function Controller() {
     return (
         <div >
             <div style ={{display: "flex"}} >
-                <div ><SimpleMap pos={featuresData} mapper={displayInTable} /></div>
+                <div ><SimpleMap pos={globalState.allPolygonsData} mapper={displayInTable} /></div>
                 <div ><RenderTable properties = {properties}></RenderTable></div>
             </div>
         </div>
