@@ -37,18 +37,10 @@ const useStyles = makeStyles({
 
 const RenderTable = (props) => {
 
+	//  console.log("PROPERTIRES ", props.properties[0])
 	const changedRow = useRef(null);
 	const [globalState, globalActions] = useGlobal()
-	const list = props.properties.map((ele, index) =>
-		<tr onMouseOver={() => { ShowPolygonfromMap(ele.OBJECTID) }} key={ele.OBJECTID} id={ele.OBJECTID}>
-			<td >{ele.OBJECTID}</td>
-			<td>{ele.Shape__Area}</td>
-			<td>{ele.Shape__Length}</td>
-			<td><input defaultValue={globalState.polygonsColors[ele.OBJECTID]} id={ele.OBJECTID} onChange={updateColor}></input></td>
-			<td><input defaultValue={globalState.polygonsNames[ele.OBJECTID]} id={ele.OBJECTID} onChange={updateName}></input></td>
-		</tr>
 
-	)
 	function updateColor(e) {
 		changedRow.current = { val: e.target.value, id: e.target.id }
 	}
@@ -66,8 +58,8 @@ const RenderTable = (props) => {
 	}
 
 	function deletePolygon(e){
-		props.properties.splice(e.target.id,1)
-		globalActions.removePoly(e.target.id)
+		console.log(e.currentTarget .id, "REMOVE")
+		globalActions.removePoly(e.currentTarget .id)
 	}
 	const columns = [
 		{ id: 'name', label: 'Name', minWidth: 170 },
@@ -138,34 +130,34 @@ const RenderTable = (props) => {
 					<TableBody>
 						{props.properties.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 							return (
-								<TableRow hover onMouseOver={() => { ShowPolygonfromMap(row.OBJECTID) }} role="checkbox" tabIndex={-1} key={row.OBJECTID} id = {row.OBJECTID}>
+								<TableRow role="checkbox" tabIndex={-1} key={row.properties.OBJECTID} id = {row.properties.OBJECTID}>
 									<TableCell >
-										{row.OBJECTID}
+										{row.properties.OBJECTID}
 									</TableCell>
 									<TableCell >
-										{row.Shape__Length}
+										{row.properties.Shape__Length}
 									</TableCell>
 									<TableCell >
-										{row.Shape__Length}
+										{row.properties.Shape__Length}
 									</TableCell>
 									<TableCell >
 										<Input
-											defaultValue={globalState.polygonsColors[row.OBJECTID]}
+											defaultValue={row.color}
 											onChange={updateColor}
 											className={classes.input}
-											 id={row.OBJECTID}
+											//  id={row.properties.OBJECTID}
 										/>
 									</TableCell>
 									<TableCell >
 										<Input
-											defaultValue={globalState.polygonsNames[row.OBJECTID]}
+											defaultValue={row.name}
 											onChange={updateName}
 											className={classes.input}
-											 id={row.OBJECTID}
+											//  id={row.OBJECTID}
 										/>
 									</TableCell>
 									<TableCell>
-										<Button style = {{backgroundColor:"red"}} id={row.OBJECTID} onClick = {deletePolygon}>delete</Button>
+										<Button style = {{backgroundColor:"red"}} id = {row.properties.OBJECTID} onClick = {deletePolygon}>delete</Button>
 									</TableCell>
 								</TableRow>
 							);

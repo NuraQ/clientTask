@@ -35,15 +35,14 @@ export const addNewPoly = (globalState, payload) => {
     console.log(globalState.state.polygonAddedToMap)
 }
 export const removePoly = (globalState, payload) => {
-    const names = [...globalState.state.polygonsNames]
-    names.splice(payload, 1);
-    globalState.setState({polygonsNames: names });
-
-    const colors = [...globalState.state.polygonsColors]
-    colors.splice(payload, 1);
-    globalState.setState({polygonsColors: colors });
-
     const allPolys = [...globalState.state.allPolygonsData]
-    allPolys.splice(payload, 1);
-    globalState.setState({allPolygonsData: allPolys });
+    console.log("PAYLOAD",payload)
+    for (var i = 0 ; i < allPolys.length; i++){
+        if(allPolys[i].id == payload){
+            console.log("DELETED")
+            allPolys.splice(i, 1);
+            globalState.setState({allPolygonsData: allPolys });
+            return
+        }
+    }
 }

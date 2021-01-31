@@ -117,11 +117,9 @@ export default function Controller() {
         globalActions.addColorForPoly()
         const propertiesData = [];
         globalState.allPolygonsData.forEach(property => {
-            propertiesData.push(property.properties);
-            let color = colors[Math.floor(Math.random() * colors.length)];
-            let name = names[Math.floor(Math.random() * names.length)];
-            globalActions.addColorForPoly(color);
-            globalActions.addNameForPoly(name)
+            let colorr = colors[Math.floor(Math.random() * colors.length)];
+            let namee = names[Math.floor(Math.random() * names.length)];
+            propertiesData.push({properties: property.properties, color: colorr, name: namee});
         });
         setProperties(propertiesData);
     }
@@ -141,7 +139,7 @@ export default function Controller() {
     return (
         <div >
             <div style ={{display: "flex"}} >
-                <div ><SimpleMap pos={globalState.allPolygonsData} mapper={displayInTable} /></div>
+                <div ><SimpleMap pos={globalState.allPolygonsData} colors = {properties}  mapper={displayInTable} /></div>
                 <div ><RenderTable properties = {properties}></RenderTable></div>
             </div>
         </div>

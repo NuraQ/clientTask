@@ -15,6 +15,7 @@ const SimpleMap = (props) => {
 		lat: -73.9130656659264,
 		lng: 40.55849125972
 	};
+
 	const { isLoaded } = useJsApiLoader({
 		id: 'google-map-script',
 		googleMapsApiKey: 'AIzaSyDeL9AfH6JB5TdYWWVH4WRoVmti-zFHM_g',
@@ -23,7 +24,6 @@ const SimpleMap = (props) => {
 	const [map, setMap] = React.useState(null)
 	const [polygons, setPolygons] = React.useState([])
 	const [drawnPolygonsPaths, setNewPaths] = React.useState([[]])
-
 	const onLoad = React.useCallback(function callback(map) {
 		const bounds = new window.google.maps.LatLngBounds();
 		map.fitBounds(bounds);
@@ -107,7 +107,7 @@ const SimpleMap = (props) => {
 					>
 						<div style={{ backgroundColor: 'white', opacity: 0.75, padding: 12 }}>
 							<div style={{ fontSize: 16, fontColor: `#08233B` }}>
-								{globalState.polygonsNames[marker.key]}
+								{props.colors[marker.key] ? props.colors[marker.key].color: "red"}
 						   </div>
 						</div>
 					</InfoBox>
@@ -122,7 +122,7 @@ const SimpleMap = (props) => {
 			{paths.map(
 				path => {
 					return (
-						<div>
+						<div key={`polygon-path-${path.id}`}>
 							<Polygon
 								path={path.location}
 								key={path.id}
@@ -133,10 +133,10 @@ const SimpleMap = (props) => {
 								clickable={false}
 								options={{
 									polygonKey: path.id,
-									strokeColor: globalState.polygonsColors[path.id],
+								    strokeColor: props.colors[path.id] ? props.colors[path.id].color: "red",
 									strokeOpacity: 0.8,
 									strokeWeight: 2,
-									fillColor: globalState.polygonsColors[path.id],
+								    fillColor: props.colors[path.id] ? props.colors[path.id].color: "red",
 									fillOpacity: 0.35,
 									draggable: true,
 									geodesic: true,
